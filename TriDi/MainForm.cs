@@ -47,7 +47,7 @@ namespace TriDi
                 }
                 for (int x = x_s; x < x_e; x++)
                 {
-                    buffer[x, (int)y] = color;
+                    DrawPoint(x, (int)y, color);
                     y += slope;
                 }
             }
@@ -68,7 +68,7 @@ namespace TriDi
                 }
                 for (int x = x_s; x < x_e; x++)
                 {
-                    buffer[(int)y, x] = color;
+                    DrawPoint((int)y, x, color);
                     y += slope;
                 }
             }
@@ -76,7 +76,10 @@ namespace TriDi
 
         void DrawPoint(int x, int y, bool color)
         {
-            buffer[x, y] = color;
+            if ((x >= 0) && (y >= 0) && (x < 300) && (y < 200))
+            {
+                buffer[x, y] = color;
+            }
         }
 
         void DrawBuffer()

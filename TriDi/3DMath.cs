@@ -8,6 +8,73 @@ namespace TriDi
 {
     static class Math3D
     {
+        public static double[,] ProjectionMatrix(double nearClip, double farClip, double hFOV, double vFOV)
+        {
+            double[,] res = new double[4, 4];
+            MatrixZeroFill(res);
+            res[0, 0] = 1.0 / Math.Tan(hFOV);
+            res[1, 1] = 1.0 / Math.Tan(vFOV);
+            res[2, 2] = farClip / (farClip - nearClip);
+            res[3, 2] = -farClip / (farClip - nearClip) * nearClip;
+            res[2, 3] = 1.0;
+            return res;
+        }
+
+        public static double[,] TranslateMatrix(double x, double y, double z)
+        {
+            double[,] res = new double[4, 4];
+            MatrixDiagonalFill(res);
+            res[0, 3] = x;
+            res[1, 3] = y;
+            res[2, 3] = z;
+            return res;
+        }
+
+        public static double[,] RotateMatrix(Axis axis, double angle)
+        {
+            double[,] res = new double[4, 4];
+            MatrixDiagonalFill(res);
+            switch (axis)
+            {
+                case Axis.X:
+                    {
+                        res[1, 1] = Math.Cos(angle);
+                        res[1, 2] = Math.Sin(angle);
+                        res[2, 1] = -Math.Sin(angle);
+                        res[2, 2] = Math.Cos(angle);
+                        break;
+                    }
+                case Axis.Y:
+                    {
+                        res[0, 0] = Math.Cos(angle);
+                        res[0, 2] = Math.Sin(angle);
+                        res[2, 0] = -Math.Sin(angle);
+                        res[2, 2] = Math.Cos(angle);
+                        break;
+                    }
+                case Axis.Z:
+                    {
+                        res[0, 0] = Math.Cos(angle);
+                        res[0, 1] = Math.Sin(angle);
+                        res[1, 0] = -Math.Sin(angle);
+                        res[1, 1] = Math.Cos(angle);
+                        break;
+                    }
+            }
+            return res;
+        }
+
+        public static double[,] ScaleMatrix(double scaleX, double scaleY, double scaleZ)
+        {
+            double[,] res = new double[4, 4];
+            MatrixZeroFill(res);
+            res[0, 0] = scaleX;
+            res[1, 1] = scaleY;
+            res[2, 2] = scaleZ;
+            res[3, 3] = 1.0;
+            return res;
+        }
+
         public static double[] MatrixToVector(double[,] vector, bool isColumn)
         {
             double[] res;
@@ -159,5 +226,10 @@ namespace TriDi
         {
             return Math.Sqrt(vector[0] * vector[0] + vector[1] * vector[1] + vector[2] * vector[2]);
         }
+
+        public enum Axis
+        {
+            X, Y, Z
+        };
     }
 }

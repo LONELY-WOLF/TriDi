@@ -146,11 +146,11 @@ namespace TriDi
 
         public static double[,] MatrixM(double[,] m1, double[,] m2)
         {
-            if (m1.GetLength(1) == m2.GetLength(0))
+            if (m2.GetLength(1) == m1.GetLength(0))
             {
-                int xmax = m1.GetLength(0);
-                int ymax = m2.GetLength(1);
-                int zmax = m1.GetLength(1);
+                int xmax = m2.GetLength(0);
+                int ymax = m1.GetLength(1);
+                int zmax = m2.GetLength(1);
                 double[,] res = new double[xmax, ymax];
                 for (int x = 0; x < xmax; x++)
                 {
@@ -159,7 +159,7 @@ namespace TriDi
                         res[x, y] = 0.0;
                         for (int z = 0; z < zmax; z++)
                         {
-                            res[x, y] += m1[x, z] * m2[z, y];
+                            res[x, y] += m2[x, z] * m1[z, y];
                         }
                     }
                 }

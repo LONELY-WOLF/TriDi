@@ -8,11 +8,24 @@ namespace TriDi
 {
     static class Math3D
     {
-        public static double[,] ProjectionMatrix(double nearClip, double farClip, double hFOV, double vFOV)
+        public static void MatrixNorm(double[,] matrix)
+        {
+            int xmax = matrix.GetLength(1);
+            int ymax = matrix.GetLength(0);
+            for (int x = 0; x < xmax; x++)
+            {
+                for (int y = 0; y < ymax; y++)
+                {
+                    matrix[y, x] /= matrix[ymax - 1, xmax - 1];
+                }
+            }
+        }
+
+        public static double[,] ProjectionMatrix(double nearClip, double farClip, double vFOV, double aspect)
         {
             double[,] res = new double[4, 4];
             MatrixZeroFill(res);
-            res[0, 0] = 1.0 / Math.Tan(hFOV);
+            res[0, 0] = 1.0 / Math.Tan(vFOV) / aspect;
             res[1, 1] = 1.0 / Math.Tan(vFOV);
             res[2, 2] = farClip / (farClip - nearClip);
             res[3, 2] = -farClip / (farClip - nearClip) * nearClip;
@@ -100,7 +113,7 @@ namespace TriDi
         public static double[,] VectorToMatrix(double[] vector, bool isColumn)
         {
             double[,] res;
-            if (isColumn)
+            if (!isColumn)
             {
                 res = new double[1, vector.Length];
                 for (int i = 0; i < vector.Length; i++)

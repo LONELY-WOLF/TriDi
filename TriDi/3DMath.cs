@@ -21,6 +21,18 @@ namespace TriDi
             }
         }
 
+        public static double[,] ViewportMatrix(int width, int height)
+        {
+            double[,] res = new double[4, 4];
+            MatrixDiagonalFill(res);
+            res[0, 0] = width / 2.0;
+            res[0, 3] = width / 2.0;
+            res[1, 1] = -height / 2.0;
+            res[1, 3] = height / 2.0;
+            res[2, 3] = 1;
+            return res;
+        }
+
         public static double[,] ProjectionMatrix(double nearClip, double farClip, double vFOV, double aspect)
         {
             double[,] res = new double[4, 4];

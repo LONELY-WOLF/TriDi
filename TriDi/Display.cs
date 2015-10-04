@@ -10,6 +10,17 @@ namespace TriDi
     {
         public static bool[,] buffer = new bool[300, 200];
 
+        public static void Fill(bool color)
+        {
+            for (int x = 0; x < buffer.GetLength(0); x++)
+            {
+                for (int y = 0; y < buffer.GetLength(1); y++)
+                {
+                    buffer[x, y] = color;
+                }
+            }
+        }
+
         public static void DrawLine(int x1, int y1, int x2, int y2, bool color)
         {
             int x_s, x_e;

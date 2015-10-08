@@ -208,15 +208,7 @@ namespace TriDi
         private void display_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
-            e.Graphics.DrawImage(
-               display.Image,
-                new Rectangle(0, 0, display.Width, display.Height),
-                // destination rectangle 
-                0,
-                0,           // upper-left corner of source rectangle
-                display.Image.Width,       // width of source rectangle
-                display.Image.Height,      // height of source rectangle
-                GraphicsUnit.Pixel);
+            e.Graphics.DrawImage(display.Image, new Rectangle(0, 0, display.Width, display.Height), 0, 0, display.Image.Width, display.Image.Height, GraphicsUnit.Pixel);
         }
 
         private void display_Click(object sender, EventArgs e)

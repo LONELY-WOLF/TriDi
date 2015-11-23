@@ -7,6 +7,7 @@ namespace TriDi_netMF_demo_CLI
 {
     public class Program
     {
+        Bitmap wbmp = new Bitmap(240, 320);
         Bitmap bmp = new Bitmap(240, 320);
         float angle;
         float[][][] cube = new float[24][][];
@@ -17,10 +18,11 @@ namespace TriDi_netMF_demo_CLI
 
             Display.Init();
             app.CubeInit();
+            app.wbmp.DrawRectangle(Color.White, 0, 0, 0, 240, 320, 0, 0, Color.White, 0, 0, Color.White, 0, 0, 255);
 
             while (true)
             {
-                Display.Fill(false);
+                //Display.Fill(false);
                 app.angle += 0.05f;
                 if (app.angle > (float)System.Math.PI * 2.0f)
                 {
@@ -196,6 +198,8 @@ namespace TriDi_netMF_demo_CLI
 
         void drawCube()
         {
+            bmp.DrawImage(0, 0, wbmp, 0, 0, 240, 320);
+            //bmp.DrawRectangle(Color.White, 0, 0, 0, 240, 320, 0, 0, Color.White, 0, 0, Color.White, 0, 0, 255);
             float[][] Mr = Math3D.RotateMatrix(Math3D.Axis.Y, angle);
             float[][] Mp = Math3D.ProjectionMatrix(1.0f, 100.0f, (float)System.Math.PI * 0.15f, 240.0f / 320.0f);
             float[][] Mvp = Math3D.ViewportMatrix(240, 320);
@@ -213,20 +217,22 @@ namespace TriDi_netMF_demo_CLI
 
             for (int i = 0; i < 24; i += 2)
             {
-                Display.DrawLine((int)(cube2[i][0][0]), (int)(cube2[i][1][0]), (int)(cube2[i + 1][0][0]), (int)(cube2[i + 1][1][0]), true);
+                bmp.DrawLine(Color.Black, 1, (int)(cube2[i][0][0]), (int)(cube2[i][1][0]), (int)(cube2[i + 1][0][0]), (int)(cube2[i + 1][1][0]));
+                //Display.DrawLine((int)(cube2[i][0][0]), (int)(cube2[i][1][0]), (int)(cube2[i + 1][0][0]), (int)(cube2[i + 1][1][0]), true);
+                //Display.DrawLine((int)(cube2[i][0][0]), (int)(cube2[i][1][0]), (int)(cube2[i + 1][0][0]), (int)(cube2[i + 1][1][0]), true, bmp);
             }
             DrawBuffer();
         }
 
         void DrawBuffer()
         {
-            for (int x = 0; x < 240; x++)
-            {
-                for (int y = 0; y < 320; y++)
-                {
-                    bmp.SetPixel(x, y, Display.buffer[x][y] ? Color.Black : Color.White);
-                }
-            }
+            //for (int x = 0; x < 240; x++)
+            //{
+            //    for (int y = 0; y < 320; y++)
+            //    {
+            //        bmp.SetPixel(x, y, Display.buffer[x][y] ? Color.Black : Color.White);
+            //    }
+            //}
             bmp.Flush();
         }
 

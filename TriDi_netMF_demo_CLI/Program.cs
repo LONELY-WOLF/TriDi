@@ -1,24 +1,33 @@
 using System;
 using Microsoft.SPOT;
 using TriDi_netMF;
+using Microsoft.SPOT.Presentation;
 using Microsoft.SPOT.Presentation.Media;
 
 namespace TriDi_netMF_demo_CLI
 {
     public class Program
     {
-        Bitmap wbmp = new Bitmap(240, 320);
-        Bitmap bmp = new Bitmap(240, 320);
+        Bitmap wbmp;
+        Bitmap bmp;
         float angle;
         float[][][] cube = new float[24][][];
+        float[][][] cube2 = new float[24][][];
 
         public static void Main()
         {
             Program app = new Program();
 
-            Display.Init();
+            //Display.Init();
             app.CubeInit();
-            app.wbmp.DrawRectangle(Color.White, 0, 0, 0, 240, 320, 0, 0, Color.White, 0, 0, Color.White, 0, 0, 255);
+            app.bmp = new Bitmap(SystemMetrics.ScreenWidth, SystemMetrics.ScreenHeight);
+            app.bmp.DrawRectangle(Color.White, 0, 0, 0, SystemMetrics.ScreenWidth, SystemMetrics.ScreenHeight, 0, 0, Color.White, 0, 0, Color.White, 0, 0, 255);
+            app.wbmp = new Bitmap(SystemMetrics.ScreenWidth, SystemMetrics.ScreenHeight);
+            for (int i = 0; i < SystemMetrics.ScreenWidth; i++)
+            {
+                app.wbmp.DrawLine(Color.White, 1, i, 0, i, SystemMetrics.ScreenHeight);
+            }
+            //app.wbmp.DrawRectangle(Color.White, 0, 0, 0, SystemMetrics.ScreenWidth, SystemMetrics.ScreenHeight, 0, 0, Color.White, 0, 0, Color.White, 0, 0, 255);
 
             while (true)
             {
@@ -198,16 +207,24 @@ namespace TriDi_netMF_demo_CLI
 
         void drawCube()
         {
-            bmp.DrawImage(0, 0, wbmp, 0, 0, 240, 320);
+            //if (cube2[0] != null)
+            //{
+            //    for (int i = 0; i < 24; i += 2)
+            //    {
+            //        bmp.DrawLine(Color.White, 1, (int)(cube2[i][0][0]), (int)(cube2[i][1][0]), (int)(cube2[i + 1][0][0]), (int)(cube2[i + 1][1][0]));
+            //        //Display.DrawLine((int)(cube2[i][0][0]), (int)(cube2[i][1][0]), (int)(cube2[i + 1][0][0]), (int)(cube2[i + 1][1][0]), true);
+            //        //Display.DrawLine((int)(cube2[i][0][0]), (int)(cube2[i][1][0]), (int)(cube2[i + 1][0][0]), (int)(cube2[i + 1][1][0]), true, bmp);
+            //    }
+            //}
+            bmp.DrawImage(0, 0, wbmp, 0, 0, SystemMetrics.ScreenWidth, SystemMetrics.ScreenHeight);
             //bmp.DrawRectangle(Color.White, 0, 0, 0, 240, 320, 0, 0, Color.White, 0, 0, Color.White, 0, 0, 255);
             float[][] Mr = Math3D.RotateMatrix(Math3D.Axis.Y, angle);
-            float[][] Mp = Math3D.ProjectionMatrix(1.0f, 100.0f, (float)System.Math.PI * 0.15f, 240.0f / 320.0f);
-            float[][] Mvp = Math3D.ViewportMatrix(240, 320);
+            float[][] Mp = Math3D.ProjectionMatrix(1.0f, 100.0f, (float)System.Math.PI * 0.15f, (float)SystemMetrics.ScreenWidth / (float)SystemMetrics.ScreenHeight);
+            float[][] Mvp = Math3D.ViewportMatrix(SystemMetrics.ScreenWidth, SystemMetrics.ScreenHeight);
             float[][] Mt = Math3D.TranslateMatrix(0, 0, 4);
             float[][] M = Math3D.MatrixM(Mr, Mt);
             M = Math3D.MatrixM(M, Mp);
             M = Math3D.MatrixM(M, Mvp);
-            float[][][] cube2 = new float[24][][]; //12 lines
             for (int i = 0; i < 24; i++)
             {
                 float[][] tVec = Math3D.MatrixM(cube[i], M);
@@ -234,17 +251,6 @@ namespace TriDi_netMF_demo_CLI
             //    }
             //}
             bmp.Flush();
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            Display.Fill(false);
-            angle += 0.05f;
-            if (angle > (float)System.Math.PI * 2.0f)
-            {
-                angle -= (float)System.Math.PI * 2.0f;
-            }
-            this.drawCube();
         }
     }
 }
